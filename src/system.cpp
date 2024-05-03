@@ -18,22 +18,22 @@ using std::vector;
 
 You need to properly format the uptime. Refer to the comments mentioned in format. cpp for formatting the uptime.*/
 
-// TODO: Return the system's CPU
+
 Processor& System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
+
 vector<Process>& System::Processes() {
   vector<int> process_ids = LinuxParser::Pids();
   processes_.clear();
   for (int id : process_ids) {
-    if (LinuxParser::Ram(id).length() > 0) {
-      processes_.push_back(Process(id));
-    }
+    Process process_(id);
+    System::processes_.push_back(process_);
   }
-  return processes_;
+    std::sort(System::processes_.begin(), System::processes_.end(), [](Process &process1, Process &process2){return process2 < process1;});
+    return processes_;
 }
 
-// TODO: Return the system's kernel identifier (string)
+
 std::string System::Kernel() {
   return LinuxParser::Kernel();
 }
