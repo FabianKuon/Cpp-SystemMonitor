@@ -1,0 +1,39 @@
+# Compiled object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+
+# Build directories
+build/
+bin/
+
+# Dependency directories
+lib/
+libs/
+
+# IDE files
+.vscode/
+.idea/
+
+# Compiled output
+output/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# CMake specifics
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
