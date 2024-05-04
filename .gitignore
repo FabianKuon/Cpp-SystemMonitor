@@ -33,10 +33,13 @@ output/
 Thumbs.db
 
 # CMake specifics
-CMakeCache.txt
-CMakeFiles/
-CMakeScripts/
-cmake_install.cmake
+build/CMakeCache.txt
+build/CMakeFiles/
+build/CMakeScripts/
+build/cmake_install.cmake
 
 # Gtihub Access token
 credentials.env
+
+# Executable
+build/monitor
