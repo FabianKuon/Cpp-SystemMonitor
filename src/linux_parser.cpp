@@ -241,66 +241,66 @@ string LinuxParser::Command(int pid) {
 
 
 string LinuxParser::Ram(int pid) {
+  string statusFilePath = kProcDirectory + to_string(pid) + kStatusFilename;
+  std::ifstream stream(statusFilePath);
+  if (!stream.is_open()) {
+    std::cerr << "Unable to open " << statusFilePath << "\n";
+    return "";
+  }
   string line;
-  string key;
-  string value;
-
-  std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
-  if (filestream.is_open()) {
-    while (std::getline(filestream, line)) {
-      std::replace(line.begin(), line.end(), ':', ' ');
-      std::istringstream linestream(line);
-      while (linestream >> key >> value) {
-        if (key == "VmRSS:") {
-          return to_string(stoi(value)/1024);
-        }
-      }
+  while (std::getline(stream, line)) {
+    if (line.find("VmRSS:") != string::npos) {
+      std::istringstream iss(line);
+      string label;
+      long memoryUsage;
+      iss >> label >> memoryUsage;
+      return to_string(memoryUsage);
     }
-  } 
-  return string(); 
+  }
+  return "";
 }
 
 
 string LinuxParser::Uid(int pid) { 
+  string statusFilePath = kProcDirectory + to_string(pid) + kStatusFilename;
+  std::ifstream stream(statusFilePath);
+  if (!stream.is_open()) {
+    std::cerr << "Unable to open " << statusFilePath << "\n";
+    return "";
+  }
   string line;
-  string key;
-  string value;
-
-  std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
-  if (filestream.is_open()) {
-    while (std::getline(filestream, line)) {
-      std::istringstream linestream(line);
-      while (linestream >> key >> value) {
-        if (key == "Uid:") {
-          return value;
-        }
-      }
+  while (std::getline(stream, line)) {
+    if (line.find("Uid:") != string::npos) {
+      std::istringstream iss(line);
+      string label;
+      int realUid;
+      iss >> label >> realUid;
+      return to_string(realUid);
     }
   }
-  return string(); 
+  return "";
 }
 
 
 string LinuxParser::User(int pid) {
+  string userId = Uid(pid);
+  std::ifstream stream(kPasswordPath);
+  if (!stream.is_open()) {
+    std::cerr << "Unable to open " << kPasswordPath << "\n";
+    return "";
+  }
   string line;
-  string name;
-  string x;
-  string id;
-  string user_id = Uid(pid);
-
-  std::ifstream filestream(kPasswordPath);
-  if (filestream.is_open()) {
-    while (std::getline(filestream, line)) {
-      std::istringstream linestream(line);
-      std::replace(line.begin(), line.end(), ':', ' ');
-      while (linestream >> name >> x >> id) {
-        if (id == user_id) {
-          return name;
-        }
-      }
+  while(getline(stream, line)) {
+    std::istringstream iss(line);
+    string username, _, uid;
+    getline(iss, username, ':');
+    getline(iss, _, ':'); // skip password
+    getline(iss, uid, ':');
+    if (uid == userId) {
+      return username;
     }
   }
-  return string(); 
+  return "";
 }
 
 
