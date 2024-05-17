@@ -84,13 +84,13 @@ float LinuxParser::MemoryUtilization() {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
-        if (key == "MemTotal:") {
+        if (key == "MemTotal") {
           total_memory = stof(value);
         }
-        else if (key == "MemFree:") {
+        else if (key == "MemFree") {
           free_memory = stof(value);
         }
-        else if (key == "Buffers:") {
+        else if (key == "Buffers") {
           buffers = stof(value);
         }
       }
@@ -315,7 +315,7 @@ long LinuxParser::UpTime(int pid) {
     for ( int i = 1; i < 23; i++){
         linestream >> value;
         if (i == 22) {
-          return (stol(value)/sysconf(_SC_CLK_TCK));
+          return uptime - (stol(value)/sysconf(_SC_CLK_TCK));
         }
     }
   }
