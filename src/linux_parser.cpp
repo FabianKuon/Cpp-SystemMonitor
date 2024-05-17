@@ -315,7 +315,7 @@ long LinuxParser::UpTime(int pid) {
     for ( int i = 1; i < 23; i++){
         linestream >> value;
         if (i == 22) {
-          return uptime - (stol(value)/sysconf(_SC_CLK_TCK));
+          return (stol(value)/sysconf(_SC_CLK_TCK));
         }
     }
   }
