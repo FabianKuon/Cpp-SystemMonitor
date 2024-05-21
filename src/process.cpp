@@ -14,8 +14,8 @@ using std::vector;
 Process::Process(int pid) {
   pid_ = pid;
   command_ = LinuxParser::Command(pid);
-  long diff_time = LinuxParser::UpTime();
-  long totaltime = LinuxParser::ActiveJiffies(pid);
+  long diff_time = LinuxParser::UpTime(pid);
+  long totaltime = LinuxParser::ActiveJiffies(pid)/sysconf(_SC_CLK_TCK);
   utilization_ = float(totaltime)/float(diff_time);
   ram_ = LinuxParser::Ram(pid);
   uptime_ = LinuxParser::UpTime(pid);

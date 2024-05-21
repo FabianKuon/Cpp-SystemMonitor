@@ -254,6 +254,7 @@ string LinuxParser::Ram(int pid) {
       string label;
       long memoryUsage;
       iss >> label >> memoryUsage;
+      memoryUsage /= 1024;
       return to_string(memoryUsage);
     }
   }
